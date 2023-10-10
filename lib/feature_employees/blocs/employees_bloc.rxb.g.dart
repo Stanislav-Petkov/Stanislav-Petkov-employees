@@ -29,7 +29,7 @@ abstract class $EmployeesBloc extends RxBlocBase
   late final Stream<ErrorModel> _errorsState = _mapToErrorsState();
 
   /// The state of [data] implemented in [_mapToDataState]
-  late final Stream<Result<String>> _dataState = _mapToDataState();
+  late final Stream<Result<EmployeesPair>> _dataState = _mapToDataState();
 
   @override
   void fetchData() => _$fetchDataEvent.add(null);
@@ -41,13 +41,13 @@ abstract class $EmployeesBloc extends RxBlocBase
   Stream<ErrorModel> get errors => _errorsState;
 
   @override
-  Stream<Result<String>> get data => _dataState;
+  Stream<Result<EmployeesPair>> get data => _dataState;
 
   Stream<bool> _mapToIsLoadingState();
 
   Stream<ErrorModel> _mapToErrorsState();
 
-  Stream<Result<String>> _mapToDataState();
+  Stream<Result<EmployeesPair>> _mapToDataState();
 
   @override
   EmployeesBlocEvents get events => this;

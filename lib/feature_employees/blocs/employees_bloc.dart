@@ -3,7 +3,8 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../base/extensions/error_model_extensions.dart';
 import '../../../base/models/errors/error_model.dart';
-import '../services/employees_service.dart';
+import '../models/employees_pair.dart';
+import '../repositories/employees_repository.dart';
 
 part 'employees_bloc.rxb.g.dart';
 
@@ -22,19 +23,19 @@ abstract class EmployeesBlocStates {
   Stream<ErrorModel> get errors;
 
   /// TODO: Document the state
-  Stream<Result<String>> get data;
+  Stream<Result<EmployeesPair>> get data;
 }
 
 @RxBloc()
 class EmployeesBloc extends $EmployeesBloc {
-  EmployeesBloc(this.employeesService);
+  EmployeesBloc({required this.repository});
 
-  final EmployeesService employeesService;
+  final EmployeesRepository repository;
 
   @override
-  Stream<Result<String>> _mapToDataState() => _$fetchDataEvent
+  Stream<Result<EmployeesPair>> _mapToDataState() => _$fetchDataEvent
       .startWith(null)
-      .switchMap((value) => employeesService.fetchData().asResultStream())
+      .switchMap((value) => repository.fetchData().asResultStream())
       .setResultStateHandler(this)
       .shareReplay(maxSize: 1);
 

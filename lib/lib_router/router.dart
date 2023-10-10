@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../base/common_blocs/coordinator_bloc.dart';
 
-import '../feature_employees/views/employees_page.dart';
+import '../feature_employees/di/employees_page_with_dependencies.dart';
 import 'models/route_data_model.dart';
 import 'models/routes_path.dart';
 import 'views/error_page.dart';

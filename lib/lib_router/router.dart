@@ -9,24 +9,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../base/common_blocs/coordinator_bloc.dart';
-import '../feature_dashboard/di/dashboard_page_with_dependencies.dart';
-import '../feature_home/views/home_page.dart';
-import '../feature_notifications/di/notifications_page_with_dependencies.dart';
-import '../feature_profile/di/profile_page_with_dependencies.dart';
-import '../feature_splash/di/splash_page_with_dependencies.dart';
-import '../feature_splash/services/splash_service.dart';
-import '../lib_permissions/services/permissions_service.dart';
+
+import '../feature_employees/views/employees_page.dart';
 import 'models/route_data_model.dart';
-import 'models/route_model.dart';
 import 'models/routes_path.dart';
 import 'views/error_page.dart';
 
 part 'router.g.dart';
-part 'routes/profile_routes.dart';
+
 part 'routes/routes.dart';
+
 part 'routes/showcase_routes.dart';
 
 /// A wrapper class implementing all the navigation logic and providing
@@ -52,45 +46,14 @@ class AppRouter {
 
   late final GoRouter _goRouter = GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: const SplashRoute().location,
+    initialLocation: const EmployeesRoute().location,
     routes: $appRoutes,
-    redirect: _pageRedirections,
     refreshListenable: _refreshListener,
     errorPageBuilder: (context, state) => MaterialPage(
       key: state.pageKey,
       child: ErrorPage(error: state.error),
     ),
   );
-
-  /// This method contains all redirection logic.
-  FutureOr<String?> _pageRedirections(
-    BuildContext context,
-    GoRouterState state,
-  ) async {
-    if (state.matchedLocation == const SplashRoute().location) {
-      return null;
-    }
-    if (!context.read<SplashService>().isAppInitialized) {
-      return '${const SplashRoute().location}?from=${state.uri.toString()}';
-    }
-
-    final pathInfo = router.routeInformationParser.configuration
-        .findMatch(state.uri.toString());
-
-    final routeName = RouteModel.getRouteNameByFullPath(pathInfo.fullPath);
-
-    final hasPermissions = routeName != null
-        ? await context
-            .read<PermissionsService>()
-            .hasPermission(routeName, graceful: true)
-        : true;
-
-    if (!hasPermissions) {
-      return const DashboardRoute().location;
-    }
-
-    return null;
-  }
 }
 
 class _GoRouterRefreshStream extends ChangeNotifier {

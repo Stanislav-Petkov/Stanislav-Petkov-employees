@@ -6,8 +6,5 @@
 // https://opensource.org/licenses/MIT.
 
 class RoutesPath {
-  static const dashboard = '/dashboard';
-  static const profile = '/profile';
-  static const splash = '/splash';
-  static const notifications = 'notifications';
+  static const employees = '/employees';
 }

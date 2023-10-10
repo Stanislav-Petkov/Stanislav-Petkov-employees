@@ -4,19 +4,19 @@
 // Generator: RxBlocGeneratorForAnnotation
 // **************************************************************************
 
-part of 'dashboard_bloc.dart';
+part of 'employees_bloc.dart';
 
 /// Used as a contractor for the bloc, events and states classes
 /// {@nodoc}
-abstract class DashboardBlocType extends RxBlocTypeBase {
-  DashboardBlocEvents get events;
-  DashboardBlocStates get states;
+abstract class EmployeesBlocType extends RxBlocTypeBase {
+  EmployeesBlocEvents get events;
+  EmployeesBlocStates get states;
 }
 
-/// [$DashboardBloc] extended by the [DashboardBloc]
+/// [$EmployeesBloc] extended by the [EmployeesBloc]
 /// {@nodoc}
-abstract class $DashboardBloc extends RxBlocBase
-    implements DashboardBlocEvents, DashboardBlocStates, DashboardBlocType {
+abstract class $EmployeesBloc extends RxBlocBase
+    implements EmployeesBlocEvents, EmployeesBlocStates, EmployeesBlocType {
   final _compositeSubscription = CompositeSubscription();
 
   /// Тhe [Subject] where events sink to by calling [fetchData]
@@ -50,10 +50,10 @@ abstract class $DashboardBloc extends RxBlocBase
   Stream<Result<String>> _mapToDataState();
 
   @override
-  DashboardBlocEvents get events => this;
+  EmployeesBlocEvents get events => this;
 
   @override
-  DashboardBlocStates get states => this;
+  EmployeesBlocStates get states => this;
 
   @override
   void dispose() {

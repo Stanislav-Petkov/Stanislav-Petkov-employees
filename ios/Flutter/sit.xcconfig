@@ -1,0 +1,9 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-sit.xcconfig"
+#include "Generated.xcconfig"
+
+ENVIRONMENT_PLIST = environments/sit/sit.plist
+APP_DISPLAY_NAME = Employees SIT
+bundle_suffix=.sit
+CF_BUNDLE_URL_NAME=employeessit.example.com
+CF_BUNDLE_URL_SCHEME=examplesitscheme
+

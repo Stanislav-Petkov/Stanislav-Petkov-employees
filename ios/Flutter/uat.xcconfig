@@ -1,0 +1,9 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-uat.xcconfig"
+#include "Generated.xcconfig"
+
+ENVIRONMENT_PLIST = environments/uat/uat.plist
+APP_DISPLAY_NAME = Employees UAT
+bundle_suffix=.uat
+CF_BUNDLE_URL_NAME=employeesuat.example.com
+CF_BUNDLE_URL_SCHEME=exampleuatscheme
+

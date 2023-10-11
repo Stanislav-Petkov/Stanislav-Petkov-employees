@@ -39,7 +39,6 @@ class EmployeesBloc extends $EmployeesBloc {
       .setResultStateHandler(this)
       .shareReplay(maxSize: 1);
 
-  /// TODO: Implement error event-to-state logic
   @override
   Stream<ErrorModel> _mapToErrorsState() => errorState.mapToErrorModel();
 

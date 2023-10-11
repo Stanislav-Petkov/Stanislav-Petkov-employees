@@ -6,8 +6,8 @@ class EmployeesPair {
     required this.daysWorkedTogether,
   });
 
-  final int firstEmployeeId;
-  final int secondEmployeeId;
+  final String firstEmployeeId;
+  final String secondEmployeeId;
   final int projectId;
   final int daysWorkedTogether;
 }

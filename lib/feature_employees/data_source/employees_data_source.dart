@@ -1,15 +1,44 @@
+import 'dart:io';
+
 import 'package:csv/csv.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:file_picker/file_picker.dart';
 
 import '../models/employee_project.dart';
 import '../models/employees_pair.dart';
 
 class EmployeesDataSource {
-  Future<List<EmployeeProject>> parseCSV([String filePath = '']) async {
+  Future<String> pickAndReadCSVFile() async {
+    try {
+      // Open the file picker dialog
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['csv'], // Specify the allowed file extensions
+      );
 
-    final String csvString = await rootBundle.loadString('assets/values1.csv');
+      if (result != null) {
+        File file = File(result.files.single.path!);
+
+        // Read the content of the selected CSV file as a string
+        String fileContent = await file.readAsString();
+
+        // Do something with the file content (e.g., parse or display)
+        return fileContent;
+      } else {
+        // Handle the case when no file is selected
+        return 'No file selected';
+      }
+    } catch (e) {
+      // Handle any potential exceptions (e.g., file not found, permission issues)
+      return 'Error picking or reading file: $e';
+    }
+  }
+
+  Future<List<EmployeeProject>> parseCSV(String fileContent) async {
+    // read from local file in the app
+    // final String csvString = await rootBundle.loadString('assets/values1.csv');
+    // print('2: $csvString');
     final List<List<dynamic>> csvTable =
-        const CsvToListConverter().convert(csvString);
+        const CsvToListConverter().convert(fileContent);
 
     final employeeProjects = csvTable.map((row) {
       final empID = row[0];
@@ -99,7 +128,10 @@ class EmployeesDataSource {
   }
 
   Future<EmployeesPair> getEmployeesPair() async {
-    final listOfEmployeeProjects = await parseCSV();
+    final fileContext = await pickAndReadCSVFile();
+    print('1: $fileContext');
+
+    final listOfEmployeeProjects = await parseCSV(fileContext);
     final allCouplesWorkingTogether =
         findDaysWorkedTogetherNew(listOfEmployeeProjects);
 

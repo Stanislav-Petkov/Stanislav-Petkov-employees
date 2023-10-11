@@ -34,7 +34,6 @@ class EmployeesBloc extends $EmployeesBloc {
 
   @override
   Stream<Result<EmployeesPair>> _mapToDataState() => _$fetchDataEvent
-      .startWith(null)
       .switchMap((value) => repository.fetchData().asResultStream())
       .setResultStateHandler(this)
       .shareReplay(maxSize: 1);

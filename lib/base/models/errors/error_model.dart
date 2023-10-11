@@ -22,3 +22,4 @@ part 'network_error_model.dart';
 part 'no_connection_error_model.dart';
 part 'not_found_error_model.dart';
 part 'server_error_model.dart';
+part 'no_file_selected_error_model.dart';

@@ -10,7 +10,9 @@ part 'employees_bloc.rxb.g.dart';
 
 /// A contract class containing all events of the EmployeesBloC.
 abstract class EmployeesBlocEvents {
-  /// TODO: Document the event
+  @RxBlocEvent(
+    type: RxBlocEventType.behaviour,
+  )
   void fetchData();
 }
 
@@ -22,8 +24,7 @@ abstract class EmployeesBlocStates {
   /// The error state
   Stream<ErrorModel> get errors;
 
-  /// TODO: Document the state
-  Stream<Result<EmployeesPair>> get data;
+  Stream<EmployeesPair> get data;
 }
 
 @RxBloc()
@@ -33,10 +34,11 @@ class EmployeesBloc extends $EmployeesBloc {
   final EmployeesRepository repository;
 
   @override
-  Stream<Result<EmployeesPair>> _mapToDataState() => _$fetchDataEvent
+  Stream<EmployeesPair> _mapToDataState() => _$fetchDataEvent
+      .throttleTime(const Duration(milliseconds: 200))
       .switchMap((value) => repository.fetchData().asResultStream())
       .setResultStateHandler(this)
-      .shareReplay(maxSize: 1);
+      .whereSuccess();
 
   @override
   Stream<ErrorModel> _mapToErrorsState() => errorState.mapToErrorModel();

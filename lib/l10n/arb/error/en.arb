@@ -14,5 +14,6 @@
   "invalidMessage": "The entered message should be at least 2 characters long.",
   "tooLong": "The entered text is too long",
   "tooShort": "The entered text is too short",
-  "notificationsDisabledMessage":"Seems that you have denied notifications on this device. In order for us to show notifications, they need to be manually enabled from the device settings."
+  "notificationsDisabledMessage":"Seems that you have denied notifications on this device. In order for us to show notifications, they need to be manually enabled from the device settings.",
+  "noFileSelected": "No file selected"
 }

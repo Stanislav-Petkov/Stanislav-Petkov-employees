@@ -2,49 +2,54 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 
+import '../../base/models/errors/error_model.dart';
 import '../models/employee_project.dart';
 import '../models/employees_pair.dart';
 
 class EmployeesDataSource {
-  Future<String> pickAndReadCSVFile() async {
+  Future<EmployeesPair> getEmployeesPair() async {
+    final fileContent = await _pickCSVFile();
+    final listOfEmployeeProjects = await _parseCSV(fileContent);
+    final allCouplesWorkingTogether =
+        _findDaysWorkedTogetherNew(listOfEmployeeProjects);
+
+    final longestWorkingCouple =
+        _calculateLongestWorkingCouple(allCouplesWorkingTogether);
+    return longestWorkingCouple;
+  }
+
+  Future<String> _pickCSVFile() async {
     try {
-      // Open the file picker dialog
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['csv'], // Specify the allowed file extensions
+        allowedExtensions: ['csv'],
       );
 
       if (result != null) {
         File file = File(result.files.single.path!);
-
-        // Read the content of the selected CSV file as a string
-        String fileContent = await file.readAsString();
-
-        // Do something with the file content (e.g., parse or display)
-        return fileContent;
+        return await file.readAsString();
       } else {
         // Handle the case when no file is selected
-        return 'No file selected';
+        throw NoFileSelectedErrorModel();
       }
-    } catch (e) {
-      // Handle any potential exceptions (e.g., file not found, permission issues)
-      return 'Error picking or reading file: $e';
+    } catch (_) {
+      rethrow;
     }
   }
 
-  Future<List<EmployeeProject>> parseCSV(String fileContent) async {
-    // read from local file in the app
-    // final String csvString = await rootBundle.loadString('assets/values1.csv');
-    // print('2: $csvString');
+  Future<List<EmployeeProject>> _parseCSV(String fileContent) async {
+    // Read from local file in the app
+    // final String csvString = await rootBundle.loadString('assets/values.csv');
     final List<List<dynamic>> csvTable =
         const CsvToListConverter().convert(fileContent);
 
     final employeeProjects = csvTable.map((row) {
       final empID = row[0];
       final projectID = row[1];
-      final dateFrom = DateTime.parse(row[2]);
-      final dateTo = row[3] == 'NULL' ? DateTime.now() : DateTime.parse(row[3]);
+      final dateFrom = parseDate(row[2]);
+      final dateTo = row[3] == 'NULL' ? DateTime.now() : parseDate(row[3]);
 
       return EmployeeProject(
         employeeID: empID,
@@ -57,7 +62,34 @@ class EmployeesDataSource {
     return employeeProjects;
   }
 
-  Map<String, Map<int, int>> findDaysWorkedTogetherNew(
+  DateTime parseDate(String dateString) {
+    DateTime? result;
+    // yyyy-MM-dd format pattern
+    const patternDay = r'\d{2}-\d{2}-\d{4}';
+    // regex to match yyyy-MM-dd
+    const patternYear = r'^\d{4}-\d{2}-\d{2}$';
+    // MM/dd/yyyy
+    const patternMonth = r'^\d{2}/\d{2}/\d{4}$';
+
+    if (matchesPattern(dateString, patternDay)) {
+      result = DateFormat('dd-MM-yyyy').parse(dateString);
+    } else if (matchesPattern(dateString, patternYear)) {
+      result = DateFormat('yyyy-MM-dd').parse(dateString);
+    } else if (matchesPattern(dateString, patternMonth)) {
+      result = DateFormat('MM/dd/yyyy').parse(dateString);
+    } else {
+      throw FormatException('Date format not recognized: $dateString');
+    }
+
+    return result;
+  }
+
+  bool matchesPattern(String input, String pattern) {
+    final regex = RegExp(pattern);
+    return regex.hasMatch(input);
+  }
+
+  Map<String, Map<int, int>> _findDaysWorkedTogetherNew(
       List<EmployeeProject> data) {
     final pairs = <String, Map<int, int>>{};
 
@@ -96,7 +128,7 @@ class EmployeesDataSource {
     return pairs;
   }
 
-  EmployeesPair calculateLongestWorkingCouple(
+  EmployeesPair _calculateLongestWorkingCouple(
       Map<String, Map<int, int>> allCouplesWorkingTogether) {
     String? maxCouple;
     int? maxDaysWorked;
@@ -121,23 +153,10 @@ class EmployeesDataSource {
     }
 
     return EmployeesPair(
-        firstEmployeeId: firstEmployeeId!,
-        secondEmployeeId: secondEmployeeId!,
-        projectId: projectId!,
-        daysWorkedTogether: maxDaysWorked!);
-  }
-
-  Future<EmployeesPair> getEmployeesPair() async {
-    final fileContext = await pickAndReadCSVFile();
-    print('1: $fileContext');
-
-    final listOfEmployeeProjects = await parseCSV(fileContext);
-    final allCouplesWorkingTogether =
-        findDaysWorkedTogetherNew(listOfEmployeeProjects);
-
-    final longestWorkingCouple =
-        calculateLongestWorkingCouple(allCouplesWorkingTogether);
-
-    return longestWorkingCouple;
+      firstEmployeeId: firstEmployeeId!,
+      secondEmployeeId: secondEmployeeId!,
+      projectId: projectId!,
+      daysWorkedTogether: maxDaysWorked!,
+    );
   }
 }

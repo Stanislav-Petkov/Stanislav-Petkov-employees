@@ -26,6 +26,7 @@ dependencies:
   go_router: ^11.1.2
   golden_toolkit: ^0.15.0
   http: ^1.1.0 # This package is used for the local server (if not used, can be removed)
+  intl: ^0.18.1
   jaguar_jwt: ^3.0.0 # This package is used for the local server (if not used, can be removed)
   json_annotation: ^4.8.1
   jwt_decoder: ^2.0.1
@@ -61,7 +62,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
-    - assets/values1.csv
+    - assets/values.csv
   fonts:
     - family: WorkSans
       fonts:

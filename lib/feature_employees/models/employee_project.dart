@@ -7,7 +7,6 @@ class EmployeeProject {
     required this.dateTo,
   });
 
-// todo dateTo can be null
   final int employeeID;
   final int projectID;
   final DateTime dateFrom;

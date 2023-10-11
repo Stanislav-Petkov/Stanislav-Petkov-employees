@@ -20,7 +20,7 @@ abstract class $EmployeesBloc extends RxBlocBase
   final _compositeSubscription = CompositeSubscription();
 
   /// Тhe [Subject] where events sink to by calling [fetchData]
-  final _$fetchDataEvent = PublishSubject<void>();
+  final _$fetchDataEvent = BehaviorSubject<void>();
 
   /// The state of [isLoading] implemented in [_mapToIsLoadingState]
   late final Stream<bool> _isLoadingState = _mapToIsLoadingState();
@@ -29,7 +29,7 @@ abstract class $EmployeesBloc extends RxBlocBase
   late final Stream<ErrorModel> _errorsState = _mapToErrorsState();
 
   /// The state of [data] implemented in [_mapToDataState]
-  late final Stream<Result<EmployeesPair>> _dataState = _mapToDataState();
+  late final Stream<EmployeesPair> _dataState = _mapToDataState();
 
   @override
   void fetchData() => _$fetchDataEvent.add(null);
@@ -41,13 +41,13 @@ abstract class $EmployeesBloc extends RxBlocBase
   Stream<ErrorModel> get errors => _errorsState;
 
   @override
-  Stream<Result<EmployeesPair>> get data => _dataState;
+  Stream<EmployeesPair> get data => _dataState;
 
   Stream<bool> _mapToIsLoadingState();
 
   Stream<ErrorModel> _mapToErrorsState();
 
-  Stream<Result<EmployeesPair>> _mapToDataState();
+  Stream<EmployeesPair> _mapToDataState();
 
   @override
   EmployeesBlocEvents get events => this;

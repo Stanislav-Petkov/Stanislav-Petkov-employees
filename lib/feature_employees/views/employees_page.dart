@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rx_bloc/flutter_rx_bloc.dart';
 import 'package:provider/provider.dart';
 
+import '../../base/common_ui_components/app_error_modal_widget.dart';
 import '../blocs/employees_bloc.dart';
 import '../models/employees_pair.dart';
 
@@ -17,29 +18,32 @@ class EmployeesPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                width: 120,
+                width: 220,
                 child: FloatingActionButton.extended(
-                    onPressed: () =>
-                        context.read<EmployeesBlocType>().events.fetchData(),
-                    label: const Text('Pick file'),
-                    icon: const Icon(Icons.description)),
+                  onPressed: () =>
+                      context.read<EmployeesBlocType>().events.fetchData(),
+                  label: const Text('Pick a csv file'),
+                  icon: const Icon(Icons.description),
+                ),
               ),
-              RxResultBuilder<EmployeesBlocType, EmployeesPair>(
+              RxBlocBuilder<EmployeesBlocType, EmployeesPair>(
                 state: (bloc) => bloc.states.data,
-                buildSuccess: (context, data, bloc) {
-                  // print('data: $data');
-                  return Column(
-                    children: [
-                      Text('EmployeeId1 ${data.firstEmployeeId}'),
-                      Text('EmployeeId2 ${data.secondEmployeeId}'),
-                      Text('ProjectId ${data.projectId}'),
-                      Text('Days Worked ${data.daysWorkedTogether}'),
-                    ],
-                  );
+                builder: (context, pair, bloc) {
+                  if (pair.hasData) {
+                    return Column(
+                      children: [
+                        Text('EmployeeId1 ${pair.data!.firstEmployeeId}'),
+                        Text('EmployeeId2 ${pair.data!.secondEmployeeId}'),
+                        Text('ProjectId ${pair.data!.projectId}'),
+                        Text('Days Worked ${pair.data!.daysWorkedTogether}'),
+                      ],
+                    );
+                  }
+                  return Container();
                 },
-                buildLoading: (context, bloc) =>
-                    const CircularProgressIndicator(),
-                buildError: (context, error, bloc) => Text(error.toString()),
+              ),
+              AppErrorModalWidget<EmployeesBlocType>(
+                errorState: (bloc) => bloc.states.errors,
               ),
             ],
           ),

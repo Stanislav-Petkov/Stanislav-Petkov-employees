@@ -39,6 +39,7 @@ dependencies:
   shelf: ^1.4.1 # This package is used for the local server (if not used, can be removed)
   shelf_router: ^1.1.4 # This package is used for the local server (if not used, can be removed)
   shelf_static: ^1.1.2 # This package is used for the local server (if not used, can be removed)
+  syncfusion_flutter_datagrid: ^23.1.40
   widget_toolkit: ^0.0.2-dev.1
 
 dev_dependencies:

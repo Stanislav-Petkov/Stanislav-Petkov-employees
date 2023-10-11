@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../base/common_ui_components/app_error_modal_widget.dart';
 import '../blocs/employees_bloc.dart';
 import '../models/employees_pair.dart';
+import '../ui_components/employee_data_grid.dart';
 
 class EmployeesPage extends StatelessWidget {
   const EmployeesPage({super.key});
@@ -17,6 +18,7 @@ class EmployeesPage extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
+              const SizedBox(height: 10,),
               SizedBox(
                 width: 220,
                 child: FloatingActionButton.extended(
@@ -26,18 +28,12 @@ class EmployeesPage extends StatelessWidget {
                   icon: const Icon(Icons.description),
                 ),
               ),
+              const SizedBox(height: 10,),
               RxBlocBuilder<EmployeesBlocType, EmployeesPair>(
                 state: (bloc) => bloc.states.data,
                 builder: (context, pair, bloc) {
                   if (pair.hasData) {
-                    return Column(
-                      children: [
-                        Text('EmployeeId1 ${pair.data!.firstEmployeeId}'),
-                        Text('EmployeeId2 ${pair.data!.secondEmployeeId}'),
-                        Text('ProjectId ${pair.data!.projectId}'),
-                        Text('Days Worked ${pair.data!.daysWorkedTogether}'),
-                      ],
-                    );
+                    return EmployeeDataGrid(employeesPair: pair.data!);
                   }
                   return Container();
                 },

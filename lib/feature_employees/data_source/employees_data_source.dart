@@ -71,11 +71,11 @@ class EmployeesDataSource {
     // MM/dd/yyyy
     const patternMonth = r'^\d{2}/\d{2}/\d{4}$';
 
-    if (matchesPattern(dateString, patternDay)) {
+    if (_matchesPattern(dateString, patternDay)) {
       result = DateFormat('dd-MM-yyyy').parse(dateString);
-    } else if (matchesPattern(dateString, patternYear)) {
+    } else if (_matchesPattern(dateString, patternYear)) {
       result = DateFormat('yyyy-MM-dd').parse(dateString);
-    } else if (matchesPattern(dateString, patternMonth)) {
+    } else if (_matchesPattern(dateString, patternMonth)) {
       result = DateFormat('MM/dd/yyyy').parse(dateString);
     } else {
       throw FormatException('Date format not recognized: $dateString');
@@ -84,7 +84,7 @@ class EmployeesDataSource {
     return result;
   }
 
-  bool matchesPattern(String input, String pattern) {
+  bool _matchesPattern(String input, String pattern) {
     final regex = RegExp(pattern);
     return regex.hasMatch(input);
   }

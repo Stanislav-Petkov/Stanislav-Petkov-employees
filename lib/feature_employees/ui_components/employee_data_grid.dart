@@ -8,12 +8,6 @@ class EmployeeDataGrid extends StatelessWidget {
    const EmployeeDataGrid({required this.employeesPair, super.key});
 
   final EmployeesPair employeesPair;
-  // final p = EmployeesPair(
-  //   firstEmployeeId: '1',
-  //   secondEmployeeId: '1',
-  //   projectId: 1,
-  //   daysWorkedTogether: 2,
-  // );
 
   @override
   Widget build(BuildContext context) {

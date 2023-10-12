@@ -13,7 +13,7 @@ class EmployeesDataSource {
     final fileContent = await _pickCSVFile();
     final listOfEmployeeProjects = await _parseCSV(fileContent);
     final allCouplesWorkingTogether =
-        _findDaysWorkedTogetherNew(listOfEmployeeProjects);
+        _findDaysWorkedTogether(listOfEmployeeProjects);
 
     final longestWorkingCouple =
         _calculateLongestWorkingCouple(allCouplesWorkingTogether);
@@ -89,7 +89,7 @@ class EmployeesDataSource {
     return regex.hasMatch(input);
   }
 
-  Map<String, Map<int, int>> _findDaysWorkedTogetherNew(
+  Map<String, Map<int, int>> _findDaysWorkedTogether(
       List<EmployeeProject> data) {
     final pairs = <String, Map<int, int>>{};
 

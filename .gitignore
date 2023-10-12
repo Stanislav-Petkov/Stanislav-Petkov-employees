@@ -27,8 +27,8 @@
 .fvm/
 
 # Generated code
-lib/generated_plugin_registrant.dart
-lib/assets.dart
+#lib/generated_plugin_registrant.dart
+#lib/assets.dart
 
 # Symbolication related
 app.*.symbols
